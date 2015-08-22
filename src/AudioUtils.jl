@@ -45,9 +45,12 @@ geoMean([3, 75, 1000])
 ```
 """->
 function geoMean{T<:Real}(x::AbstractVector{T})
+    if in(-1, sign(x))
+        error("Cannot compute geometric mean with negative values")
+    end
     n = length(x)
     m = exp(sum(log(x))/n)
-  return(m)
+    return m
 end
 
 @doc doc"""
@@ -68,8 +71,11 @@ wGeoMean([5, 80, 150], [0.4, 0.2, 0.4])
 """->
 function wGeoMean{T<:Real, P<:Real}(x::AbstractVector{T},
                                     w::AbstractVector{P})
-  wm = exp(sum(w.*log(x))/sum(w))
-  return(wm)
+    if in(-1, sign(x))
+        error("Cannot compute weighted geometric mean with negative values")
+    end
+    wm = exp(sum(w.*log(x))/sum(w))
+    return wm
 end
 
 @doc doc"""
@@ -90,8 +96,11 @@ geoSD([3, 75, 1000])
 ```
 """->
 function geoSD{T<:Real}(x::AbstractVector{T})
+    if in(-1, sign(x))
+        error("Cannot compute geometric standard deviation with negative values")
+    end
     out = exp(std(log(x)))
-    return(out)
+    return out
 end
 
 @doc doc"""
@@ -113,9 +122,12 @@ geoSE([3, 75, 1000])
 
 """->
 function geoSE{T<:Real}(x::AbstractVector{T})
-  n = length(x)
-  out = exp(sqrt(sum((log(x) - mean(log(x)))^2) / ((n-1)* n)))
-  return(out)
+    if in(-1, sign(x))
+        error("Cannot compute geometric standard error with negative values")
+    end
+    n = length(x)
+    out = exp(sqrt(sum((log(x) - mean(log(x))).^2) / ((n-1)* n)))
+    return out
 end
 
 @doc doc"""
@@ -138,6 +150,10 @@ Compute the gaussian psychometric function.
 
 ```julia
 gaussianPsy(2.5, 3, 2, 0.5, 0.001)
+# for several x
+gaussianPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
+# for several midpoints
+gaussianPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
 """->
 
@@ -179,6 +195,10 @@ Compute the inverse of the gaussian psychometric function.
 
 ```julia
 invGaussianPsy(0.9, 5, 1, 0.5, 0.02)
+# for several pc
+invGaussianPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
+#for several midpoints
+invGaussianPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
 ```
     
 """->
@@ -218,6 +238,10 @@ Compute the Weibull psychometric function.
 
 ```julia
 weibullPsy(2.5, 3, 2, 0.5, 0.001)
+# for several x
+weibullPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
+# for several midpoints
+weibullPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
 """->
 
@@ -256,6 +280,10 @@ Compute the inverse of the Weibull psychometric function.
 
 ```julia
 invWeibullPsy(0.9, 5, 1, 0.5, 0.02)
+# for several pc
+invWeibullPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
+#for several midpoints
+invWeibullPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
 ```
     
 """->
@@ -295,6 +323,11 @@ Compute the gumbel psychometric function.
 
 ```julia
 gumbelPsy(2.5, 3, 2, 0.5, 0.001)
+# for several x
+gumbelPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
+# for several midpoints
+gumbelPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
+
 ```
 """->
     
@@ -333,6 +366,10 @@ Compute the inverse of the gumbel psychometric function.
 
 ```julia
 invGumbelPsy(0.9, 5, 1, 0.5, 0.02)
+# for several pc
+invGumbelPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
+#for several midpoints
+invGumbelPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
 ```
     
 """->
@@ -372,6 +409,10 @@ Compute the logistic psychometric function.
 
 ```julia
 logisticPsy(2.5, 3, 2, 0.5, 0.001)
+# for several x
+logisticPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
+# for several midpoints
+logisticPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
 """->
 
@@ -413,6 +454,10 @@ Compute the inverse of the logistic psychometric function.
 
 ```julia
 invLogisticPsy(0.9, 5, 1, 0.5, 0.02)
+# for several pc
+invLogisticPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
+#for several midpoints
+invLogisticPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
 ```
     
 """->
