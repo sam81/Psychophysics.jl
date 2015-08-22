@@ -23,7 +23,7 @@
 
 module AudioUtils
 
-export gaussianPsy, geoMean, geoSd, geoSe, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, se, weibullPsy, wGeoMean
+export gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, weibullPsy, wGeoMean
 
 VERSION < v"0.4-" && using Docile
 
