@@ -29,6 +29,20 @@ VERSION < v"0.4-" && using Docile
 
 @doc doc"""
 Compute the geometric mean.
+
+#####Parameters
+
+* `x`: Vector containing the values for which to compute the mean.
+
+#####Returns
+
+* `m`: The geometric mean.
+
+##### Examples
+
+```julia
+geoMean([3, 75, 1000])
+```
 """->
 function geoMean{T<:Real}(x::AbstractVector{T})
     n = length(x)
@@ -43,6 +57,10 @@ Compute a weighted geometric mean.
 * `x`: Vector containing the values for which to compute the mean.
 * `w`: Vector of weights (the same length as `x`).
 
+##### Returns
+
+* `wm`: The weighted geometric mean.
+
 ##### Examples
 ```julia
 wGeoMean([5, 80, 150], [0.4, 0.2, 0.4])
@@ -56,16 +74,45 @@ end
 
 @doc doc"""
 Compute the geometric standard deviation.
+
+##### Parameters
+
+* `x`: Vector containing the values for which to compute the standard deviation.
+
+##### Returns
+
+`sd`: The geometric standard deviation.
+
+##### Examples
+
+```julia
+geoSD([3, 75, 1000])
+```
 """->
-function geoSd{T<:Real}(x::AbstractVector{T})
+function geoSD{T<:Real}(x::AbstractVector{T})
     out = exp(std(log(x)))
     return(out)
 end
 
 @doc doc"""
 Compute the geometric standard error.
+
+##### Parameters
+
+* `x`: Vector containing the values for which to compute the standard error.
+
+##### Returns
+
+`se`: The geometric standard deviation.
+
+##### Examples
+
+```julia
+geoSE([3, 75, 1000])
+```
+
 """->
-function geoSe{T<:Real}(x::AbstractVector{T})
+function geoSE{T<:Real}(x::AbstractVector{T})
   n = length(x)
   out = exp(sqrt(sum((log(x) - mean(log(x)))^2) / ((n-1)* n)))
   return(out)
@@ -81,6 +128,11 @@ Compute the gaussian psychometric function.
 * `slope`: The slope of the psychometric function.
 * `guess`: Lower limit of the psychometric function. Guess rate.
 * `lapse`: Lapse rate.
+
+##### Returns
+
+* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+    by the input parameters.
     
 ##### Examples
 
@@ -118,6 +170,11 @@ Compute the inverse of the gaussian psychometric function.
 * `guess`: Lower limit of the psychometric function.
 * `lapse`: The lapse rate.
 
+##### Returns
+
+* `x`: the stimulus level at which percent proportion equals `p` for the
+    psychometric function defined by the input parameters.
+
 ##### Examples
 
 ```julia
@@ -127,6 +184,16 @@ invGaussianPsy(0.9, 5, 1, 0.5, 0.02)
 """->
 
 function invGaussianPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+    out = midpoint + sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
+    return out
+end
+
+function invGaussianPsy{T<:Real}(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+    out = midpoint + sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
+    return out
+end
+
+function invGaussianPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
     out = midpoint + sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
     return out
 end
@@ -141,6 +208,11 @@ Compute the Weibull psychometric function.
 * `slope`: The slope of the psychometric function.
 * `guess`: Lower limit of the psychometric function. Guess rate.
 * `lapse`: Lapse rate.
+
+##### Returns
+
+* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+    by the input parameters.
     
 ##### Examples
 
@@ -151,6 +223,16 @@ weibullPsy(2.5, 3, 2, 0.5, 0.001)
 
 function weibullPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = guess+(1-guess-lapse)*(1-exp(-(x/midpoint)^slope))
+    return out
+end
+
+function weibullPsy{T<:Real}(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+    out = guess+(1-guess-lapse)*(1-exp(-(x/midpoint).^slope))
+    return out
+end
+
+function weibullPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+    out = guess+(1-guess-lapse)*(1-exp(-(x./midpoint).^slope))
     return out
 end
 
@@ -165,6 +247,11 @@ Compute the inverse of the Weibull psychometric function.
 * `guess`: Lower limit of the psychometric function.
 * `lapse`: The lapse rate.
 
+##### Returns
+
+* `x`: the stimulus level at which percent proportion equals `p` for the
+    psychometric function defined by the input parameters.
+
 ##### Examples
 
 ```julia
@@ -173,8 +260,18 @@ invWeibullPsy(0.9, 5, 1, 0.5, 0.02)
     
 """->
 
-function invWeibullPsy(p::Real, alphax::Real, betax::Real, gammax::Real, lambdax::Real)
-    out = alphax * ( (-log(1-(p-gammax)/(1-gammax-lambdax)))^(1/betax) )
+function invWeibullPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+    out = midpoint * ( (-log(1-(p-guess)/(1-guess-lapse)))^(1/slope) )
+    return out
+end
+
+function invWeibullPsy{T<:Real}(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+    out = midpoint * ( (-log(1-(p-guess)./(1-guess-lapse))).^(1/slope) )
+    return out
+end
+
+function invWeibullPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+    out = midpoint * ( (-log(1-(p-guess)/(1-guess-lapse)))^(1/slope) )
     return out
 end
 
@@ -188,6 +285,11 @@ Compute the gumbel psychometric function.
 * `slope`: The slope of the psychometric function.
 * `guess`: Lower limit of the psychometric function. Guess rate.
 * `lapse`: Lapse rate.
+
+##### Returns
+
+* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+    by the input parameters.
     
 ##### Examples
 
@@ -198,6 +300,16 @@ gumbelPsy(2.5, 3, 2, 0.5, 0.001)
     
 function gumbelPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = guess + (1-guess-lapse) * (1-exp(-10^(slope*(x-midpoint))))
+    return out
+end
+
+function gumbelPsy{T<:Real}(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+    out = guess + (1-guess-lapse) * (1-exp(-10.^(slope*(x-midpoint))))
+    return out
+end
+
+function gumbelPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+    out = guess + (1-guess-lapse) * (1-exp(-10.^(slope*(x-midpoint))))
     return out
 end
 
@@ -212,6 +324,11 @@ Compute the inverse of the gumbel psychometric function.
 * `guess`: Lower limit of the psychometric function.
 * `lapse`: The lapse rate.
 
+##### Returns
+
+* `x`: the stimulus level at which percent proportion equals `p` for the
+    psychometric function defined by the input parameters.
+
 ##### Examples
 
 ```julia
@@ -225,6 +342,15 @@ function invGumbelPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::
     return out
 end
 
+function invGumbelPsy{T<:Real}(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+    out = midpoint + (log10(-log(1 - (p-guess)/(1-guess-lapse))))/slope
+    return out
+end
+
+function invGumbelPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+    out = midpoint + (log10(-log(1 - (p-guess)/(1-guess-lapse))))/slope
+    return out
+end
 
 @doc doc"""
 Compute the logistic psychometric function.
@@ -236,6 +362,11 @@ Compute the logistic psychometric function.
 * `slope`: The slope of the psychometric function.
 * `guess`: Lower limit of the psychometric function. Guess rate.
 * `lapse`: Lapse rate.
+
+##### Returns
+
+* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+    by the input parameters.
     
 ##### Examples
 
@@ -272,6 +403,11 @@ Compute the inverse of the logistic psychometric function.
 * `slope`: The slope of the psychometric function.
 * `guess`: Lower limit of the psychometric function.
 * `lapse`: The lapse rate.
+
+##### Returns
+
+* `x`: the stimulus level at which percent proportion equals `p` for the
+    psychometric function defined by the input parameters.
 
 ##### Examples
 
