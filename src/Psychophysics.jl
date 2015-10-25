@@ -21,7 +21,7 @@
 ## THE SOFTWARE.
 
 
-module AudioUtils
+module Psychophysics
 
 export gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, weibullPsy, wGeoMean
 
