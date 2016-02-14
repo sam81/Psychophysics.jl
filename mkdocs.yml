@@ -1,6 +1,6 @@
-site_name: AudioUtils.jl
+site_name: Psychophysics.jl
 theme: readthedocs
 pages:
-    - ['index.md', 'Introduction']
-    - ['API.md', 'Function Reference']
+    - Introduction: 'index.md'
+    - Function Reference: 'API.md'
 
