@@ -1,6 +1,6 @@
 ## The MIT License (MIT)
 
-## Copyright (c) 2013-2015 Samuele Carcagno <sam.carcagno@gmail.com>
+## Copyright (c) 2013-2016 Samuele Carcagno <sam.carcagno@gmail.com>
 
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,24 @@ module Psychophysics
 
 export gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, weibullPsy, wGeoMean
 
+export initTUD, update!
+export setupUML, UML_update
+
+
+
 VERSION < v"0.4-" && using Docile
+
+include("AdaptiveStaircase.jl")
+include("UML.jl")
 
 @doc doc"""
 Compute the geometric mean.
 
-#####Parameters
+##### Parameters
 
 * `x`: Vector containing the values for which to compute the mean.
 
-#####Returns
+##### Returns
 
 * `m`: The geometric mean.
 
@@ -431,6 +439,12 @@ end
 function logisticPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
 
     out = guess + (1-guess-lapse) *(1./(1+exp(slope*(midpoint-x))))
+    return out
+end
+
+function logisticPsy{T<:Real}(x::Real, midpoint::AbstractArray{T,3}, slope::AbstractArray{T,3}, guess::Real, lapse::AbstractArray{T,3})
+
+    out = guess + (1-guess-lapse) .*(1./(1+exp(slope.*(midpoint-x))))
     return out
 end
 
