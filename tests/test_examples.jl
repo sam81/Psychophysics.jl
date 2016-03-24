@@ -1,6 +1,6 @@
-using AudioUtils
+using Psychophysics
 
-fToProcess = ["AudioUtils.jl"]
+fToProcess = ["Psychophysics.jl"]
 for fName in fToProcess
 #fName = fToProcess[1]
     fIn = open(string("../src/", fName), "r")
@@ -23,6 +23,6 @@ end
 
 for fName in fToProcess
     fNameTest = string("test_", fName)
-    reload(fNameTest)
+    include(fNameTest)
 end
 

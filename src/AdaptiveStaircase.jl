@@ -1,3 +1,19 @@
+#   Copyright (C) 2013-2016 Samuele Carcagno <sam.carcagno@gmail.com>
+#   This file is part of Psychophysics.jl
+
+#    Psychophysics.jl is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    Psychophysics.jl is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with Psychophysics.jl.  If not, see <http://www.gnu.org/licenses/>.
+
 type AdaptiveStaircase{S<:Real, T<:Real, V<:Real, P<:Int}
     paradigm::ASCIIString
     nCorrectNeeded::Int
@@ -17,15 +33,52 @@ type AdaptiveStaircase{S<:Real, T<:Real, V<:Real, P<:Int}
     correctCount::Int
     incorrectCount::Int
     percCorrTracked::Real
+    terminationRule::ASCIIString
+    nTrialsToRun::Real
+    nTurnpointsToRun::Real
+    nTrials::Real
+    nTurnpoints::Real
+    finished::Bool
+    turnpointAverage::Real
+    turnpointSD::Real
 end
+
+@doc doc"""
+Initialize an adaptive staircase track.
+
+##### Parameters
+
+* `paradigm`: ``transformed up-down``, or ``weighted up-down``
+
+##### Returns
+
+* `AdaptiveStaircase`: An AdaptiveStaircase object.
+
+##### Examples
+
+```julia
+TUD = initTUD(paradigm="transformed up-down",
+              nCorrectNeeded=2,
+              nIncorrectNeeded=1,
+              stepSizes=[4,2],
+              turnpointsXStepSizes=[4,12],
+              procedure="arithmetic",
+              corrTrackDir="down",
+              terminationRule="turnpoints",
+              nTurnpointsToRun=16)
+```
+"""->
 
 function initTUD{T<:Real, P<:Int}(;paradigm::ASCIIString="transformed up-down",
                                   nCorrectNeeded::Int=2, nIncorrectNeeded::Int=1,
                                   stepSizes::AbstractVector{T}=[4,2],
                                   turnpointsXStepSizes::AbstractVector{P}=[4,12],
                                   procedure::ASCIIString="arithmetic",
-                                  corrTrackDir::ASCIIString="down", percCorrTracked::Real=75)
-
+                                  corrTrackDir::ASCIIString="down", percCorrTracked::Real=75,
+                                  terminationRule::ASCIIString="turnpoints",
+                                  nTrialsToRun::Real=100,
+                                  nTurnpointsToRun::Real=sum(turnpointsXStepSizes))
+    
     if corrTrackDir == "down"
         incorrTrackDir = "up"
         corrTrackSign = -1
@@ -43,23 +96,31 @@ function initTUD{T<:Real, P<:Int}(;paradigm::ASCIIString="transformed up-down",
     end
     adaptiveParam = 0
     TUD = AdaptiveStaircase(paradigm,
-                 nCorrectNeeded,
-                 nIncorrectNeeded,
-                 stepSizes,
-                 turnpointsXStepSizes,
-                 procedure,
-                 adaptiveParam,
-                 (Int)[],
-                 (Float64)[],
-                 corrTrackDir,
-                 incorrTrackDir,
-                 trackDir,
-                 corrTrackSign,
-                 incorrTrackSign,
-                 (Float64)[],
-                 0,
-                 0,
-                 percCorrTracked)
+                            nCorrectNeeded,
+                            nIncorrectNeeded,
+                            stepSizes,
+                            turnpointsXStepSizes,
+                            procedure,
+                            adaptiveParam,
+                            (Int)[],
+                            (Float64)[],
+                            corrTrackDir,
+                            incorrTrackDir,
+                            trackDir,
+                            corrTrackSign,
+                            incorrTrackSign,
+                            (Float64)[],
+                            0,
+                            0,
+                            percCorrTracked,
+                            terminationRule,
+                            nTrialsToRun,
+                            nTurnpointsToRun,
+                            0,
+                            0,
+                            false,
+                            NaN,
+                            NaN)
     return TUD
 end
 
@@ -67,13 +128,14 @@ end
 function update!(TUD::AdaptiveStaircase, level::Real, resp::Int)
     push!(TUD.responses, resp)
     push!(TUD.levels, level)
+    TUD.nTrials = TUD.nTrials+1
     TUD.adaptiveParam = level
     nTurnpoints = length(TUD.turnpoints)
     changeStepPoints = cumsum(TUD.turnpointsXStepSizes)
     #determine current step index
     stepIndexFound = false
     for i=1:length(changeStepPoints)
-        if  nTurnpoints <= changeStepPoints[i]
+        if  nTurnpoints < changeStepPoints[i]
             stepIndex = i
             stepIndexFound = true
             break
@@ -98,35 +160,62 @@ function update!(TUD::AdaptiveStaircase, level::Real, resp::Int)
 
     if resp == 1
         TUD.correctCount = TUD.correctCount+1
+        TUD.incorrectCount = 0
         if TUD.correctCount == TUD.nCorrectNeeded
             TUD.correctCount = 0
             if TUD.trackDir == TUD.incorrTrackDir
                 push!(TUD.turnpoints, TUD.adaptiveParam)
                 TUD.trackDir = copy(TUD.corrTrackDir)
+                TUD.nTurnpoints = TUD.nTurnpoints + 1
             end           
             if TUD.procedure == "arithmetic"
                 TUD.adaptiveParam = TUD.adaptiveParam + (stepSize[TUD.corrTrackDir]*TUD.corrTrackSign)
             elseif TUD.procedure == "geometric"
-                TUD.adaptiveParam = TUD.adaptiveParam * (stepSize[TUD.corrTrackDir]^TUD.corrTrackSign)
+                TUD.adaptiveParam = TUD.adaptiveParam * (float(stepSize[TUD.corrTrackDir])^TUD.corrTrackSign)
             end
         end
     elseif resp == 0
         TUD.incorrectCount = TUD.incorrectCount+1
+        TUD.correctCount = 0
         if TUD.incorrectCount == TUD.nIncorrectNeeded
             TUD.incorrectCount = 0
             if TUD.trackDir == TUD.corrTrackDir
                 push!(TUD.turnpoints, TUD.adaptiveParam)
                 TUD.trackDir = copy(TUD.incorrTrackDir)
+                TUD.nTurnpoints = TUD.nTurnpoints + 1
             end           
             if TUD.procedure == "arithmetic"
-                TUD.adaptiveParam = TUD.adaptiveParam + (stepSize[TUD.corrTrackDir]*TUD.incorrTrackSign)
+                TUD.adaptiveParam = TUD.adaptiveParam + (stepSize[TUD.incorrTrackDir]*TUD.incorrTrackSign)
             elseif TUD.procedure == "geometric"
-                TUD.adaptiveParam = TUD.adaptiveParam * (stepSize[TUD.corrTrackDir]^TUD.incorrTrackSign)
+                TUD.adaptiveParam = TUD.adaptiveParam * (float(stepSize[TUD.incorrTrackDir])^TUD.incorrTrackSign)
             end
         end
     end
-    
-    
+
+    if ((TUD.terminationRule == "turnpoints") & (TUD.nTurnpoints == TUD.nTurnpointsToRun))
+        TUD.finished = true
+    end
+
+    if ((TUD.terminationRule == "trials") & (TUD.nTrials == TUD.nTrialsToRun))
+        TUD.finished = true
+    end
+
+    if TUD.finished == true
+        if TUD.turnpointsXStepSizes == 1
+            idxStart = 1
+        else
+            idxStart = TUD.turnpointsXStepSizes[length(TUD.turnpointsXStepSizes)-1]+1
+        end
+        if TUD.procedure == "arithmetic"
+            TUD.turnpointAverage = mean(TUD.turnpoints[idxStart:end])
+            TUD.turnpointSD = std(TUD.turnpoints[idxStart:end])
+        elseif TUD.procedure == "geometric"
+            TUD.turnpointAverage = geoMean(TUD.turnpoints[idxStart:end])
+            TUD.turnpointSD = geoSD(TUD.turnpoints[idxStart:end])
+        end
+
+    end
+        
 end
 
 # TUD = initTUD(paradigm="transformed up-down", nCorrectNeeded=2, nIncorrectNeeded=1, stepSizes=[5,2.5], turnpointsXStepSizes=[4,12],

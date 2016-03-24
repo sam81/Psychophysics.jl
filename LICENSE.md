@@ -1,4 +1,4 @@
-Copyright (c) 2014-2016 Samuele Carcagno <sam.carcagno@gmail.com>
+Copyright (c) 2013-2016 Samuele Carcagno <sam.carcagno@gmail.com>
 
 Psychophysics.jl is licenced under the GPLv3 licence.
 

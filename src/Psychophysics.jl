@@ -1,25 +1,18 @@
-## The MIT License (MIT)
+#   Copyright (C) 2013-2016 Samuele Carcagno <sam.carcagno@gmail.com>
+#   This file is part of Psychophysics.jl
 
-## Copyright (c) 2013-2016 Samuele Carcagno <sam.carcagno@gmail.com>
+#    Psychophysics.jl is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 
-## Permission is hereby granted, free of charge, to any person obtaining a copy
-## of this software and associated documentation files (the "Software"), to deal
-## in the Software without restriction, including without limitation the rights
-## to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-## copies of the Software, and to permit persons to whom the Software is
-## furnished to do so, subject to the following conditions:
+#    Psychophysics.jl is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
 
-## The above copyright notice and this permission notice shall be included in
-## all copies or substantial portions of the Software.
-
-## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-## THE SOFTWARE.
-
+#    You should have received a copy of the GNU General Public License
+#    along with Psychophysics.jl.  If not, see <http://www.gnu.org/licenses/>.
 
 module Psychophysics
 
@@ -27,116 +20,15 @@ export gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelP
 
 export initTUD, update!
 export setupUML, UML_update
-
+export betaABFromMeanSTD, generalizedBetaABFromMeanSTD
 
 
 VERSION < v"0.4-" && using Docile
 
 include("AdaptiveStaircase.jl")
 include("UML.jl")
+include("stats_utils.jl")
 
-@doc doc"""
-Compute the geometric mean.
-
-##### Parameters
-
-* `x`: Vector containing the values for which to compute the mean.
-
-##### Returns
-
-* `m`: The geometric mean.
-
-##### Examples
-
-```julia
-geoMean([3, 75, 1000])
-```
-"""->
-function geoMean{T<:Real}(x::AbstractVector{T})
-    if in(-1, sign(x))
-        error("Cannot compute geometric mean with negative values")
-    end
-    n = length(x)
-    m = exp(sum(log(x))/n)
-    return m
-end
-
-@doc doc"""
-Compute a weighted geometric mean.
-
-##### Parameters
-* `x`: Vector containing the values for which to compute the mean.
-* `w`: Vector of weights (the same length as `x`).
-
-##### Returns
-
-* `wm`: The weighted geometric mean.
-
-##### Examples
-```julia
-wGeoMean([5, 80, 150], [0.4, 0.2, 0.4])
-```
-"""->
-function wGeoMean{T<:Real, P<:Real}(x::AbstractVector{T},
-                                    w::AbstractVector{P})
-    if in(-1, sign(x))
-        error("Cannot compute weighted geometric mean with negative values")
-    end
-    wm = exp(sum(w.*log(x))/sum(w))
-    return wm
-end
-
-@doc doc"""
-Compute the geometric standard deviation.
-
-##### Parameters
-
-* `x`: Vector containing the values for which to compute the standard deviation.
-
-##### Returns
-
-`sd`: The geometric standard deviation.
-
-##### Examples
-
-```julia
-geoSD([3, 75, 1000])
-```
-"""->
-function geoSD{T<:Real}(x::AbstractVector{T})
-    if in(-1, sign(x))
-        error("Cannot compute geometric standard deviation with negative values")
-    end
-    out = exp(std(log(x)))
-    return out
-end
-
-@doc doc"""
-Compute the geometric standard error.
-
-##### Parameters
-
-* `x`: Vector containing the values for which to compute the standard error.
-
-##### Returns
-
-`se`: The geometric standard deviation.
-
-##### Examples
-
-```julia
-geoSE([3, 75, 1000])
-```
-
-"""->
-function geoSE{T<:Real}(x::AbstractVector{T})
-    if in(-1, sign(x))
-        error("Cannot compute geometric standard error with negative values")
-    end
-    n = length(x)
-    out = exp(sqrt(sum((log(x) - mean(log(x))).^2) / ((n-1)* n)))
-    return out
-end
 
 @doc doc"""
 Compute the gaussian psychometric function.
