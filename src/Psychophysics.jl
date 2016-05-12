@@ -43,7 +43,7 @@ Compute the gaussian psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -88,8 +88,8 @@ Compute the inverse of the gaussian psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
-    psychometric function defined by the input parameters.
+* `x`: the stimulus level at which the proportion correct equals `p` for the
+  psychometric function defined by the input parameters.
 
 ##### Examples
 
@@ -131,7 +131,7 @@ Compute the Weibull psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -173,7 +173,7 @@ Compute the inverse of the Weibull psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
+* `x`: the stimulus level at which proportion correct equals `p` for the
     psychometric function defined by the input parameters.
 
 ##### Examples
@@ -216,7 +216,7 @@ Compute the gumbel psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -259,7 +259,7 @@ Compute the inverse of the gumbel psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
+* `x`: the stimulus level at which proportion correct equals `p` for the
     psychometric function defined by the input parameters.
 
 ##### Examples
@@ -302,7 +302,7 @@ Compute the logistic psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -353,7 +353,7 @@ Compute the inverse of the logistic psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
+* `x`: the stimulus level at which proportion correct equals `p` for the
     psychometric function defined by the input parameters.
 
 ##### Examples
