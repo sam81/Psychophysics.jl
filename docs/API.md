@@ -1,67 +1,3 @@
-Compute the geometric mean.
-
-#####Parameters
-
-* `x`: Vector containing the values for which to compute the mean.
-
-#####Returns
-
-* `m`: The geometric mean.
-
-##### Examples
-
-```julia
-geoMean([3, 75, 1000])
-```
-
-Compute a weighted geometric mean.
-
-##### Parameters
-* `x`: Vector containing the values for which to compute the mean.
-* `w`: Vector of weights (the same length as `x`).
-
-##### Returns
-
-* `wm`: The weighted geometric mean.
-
-##### Examples
-```julia
-wGeoMean([5, 80, 150], [0.4, 0.2, 0.4])
-```
-
-Compute the geometric standard deviation.
-
-##### Parameters
-
-* `x`: Vector containing the values for which to compute the standard deviation.
-
-##### Returns
-
-`sd`: The geometric standard deviation.
-
-##### Examples
-
-```julia
-geoSD([3, 75, 1000])
-```
-
-Compute the geometric standard error.
-
-##### Parameters
-
-* `x`: Vector containing the values for which to compute the standard error.
-
-##### Returns
-
-`se`: The geometric standard deviation.
-
-##### Examples
-
-```julia
-geoSE([3, 75, 1000])
-```
-
-
 Compute the gaussian psychometric function.
 
 ##### Parameters
@@ -74,7 +10,7 @@ Compute the gaussian psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -99,8 +35,8 @@ Compute the inverse of the gaussian psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
-    psychometric function defined by the input parameters.
+* `x`: the stimulus level at which the proportion correct equals `p` for the
+  psychometric function defined by the input parameters.
 
 ##### Examples
 
@@ -125,7 +61,7 @@ Compute the Weibull psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -150,7 +86,7 @@ Compute the inverse of the Weibull psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
+* `x`: the stimulus level at which proportion correct equals `p` for the
     psychometric function defined by the input parameters.
 
 ##### Examples
@@ -176,7 +112,7 @@ Compute the gumbel psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -202,7 +138,7 @@ Compute the inverse of the gumbel psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
+* `x`: the stimulus level at which proportion correct equals `p` for the
     psychometric function defined by the input parameters.
 
 ##### Examples
@@ -228,7 +164,7 @@ Compute the logistic psychometric function.
 
 ##### Returns
 
-* `pc`: The percent correct at the stimulus level `x` for the psychometric function defined
+* `pc`: The proportion correct at the stimulus level `x` for the psychometric function defined
     by the input parameters.
     
 ##### Examples
@@ -253,7 +189,7 @@ Compute the inverse of the logistic psychometric function.
 
 ##### Returns
 
-* `x`: the stimulus level at which percent proportion equals `p` for the
+* `x`: the stimulus level at which proportion correct equals `p` for the
     psychometric function defined by the input parameters.
 
 ##### Examples
