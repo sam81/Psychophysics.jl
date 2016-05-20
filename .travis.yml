@@ -8,5 +8,7 @@ julia:
 notifications:
     email: false
 
+script:
+ - julia --check-bounds=yes -e 'Pkg.clone(pwd()); Pkg.build("Psychophysics"); Pkg.test("Psychophysics"; coverage=true)'
 after_success:
 - julia -e 'cd(Pkg.dir("Psychophysics")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder())'
