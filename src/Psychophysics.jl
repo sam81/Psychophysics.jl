@@ -26,7 +26,7 @@ export betaABFromMeanSTD, generalizedBetaABFromMeanSTD
 VERSION < v"0.4-" && using Docile
 
 include("AdaptiveStaircase.jl")
-include("UML.jl")
+#include("UML.jl")
 include("stats_utils.jl")
 
 
