@@ -9,7 +9,7 @@ notifications:
     email: false
 
 addons:
-  ssh_known_hosts: git.github.com
+  ssh_known_hosts: 192.30.252.121
 
 matrix:
   allow_failures:
