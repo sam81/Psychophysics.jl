@@ -17,7 +17,6 @@ before_script:
   - cd ..
   - wget https://github.com/sam81/Psychophysics.jl/archive/master.zip
   - unzip master.zip
-  - mv Psychophysics_test_data-master/ Psychophysics_test_data/
   - cd $TRAVIS_BUILD_DIR
   - pwd
   
