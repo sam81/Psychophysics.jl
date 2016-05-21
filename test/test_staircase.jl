@@ -3,8 +3,8 @@ using Base.Test
 
 test_data_dir = "../../Psychophysics_test_data/"
 
-pyResTrialFile = test_data_dir * "/pychoacoustics_data/transformed_up-down/res_arithmetic_table_trial.csv"
-pyResBlockFile = test_data_dir * "/pychoacoustics_data/transformed_up-down/res_arithmetic_table.csv"
+pyResTrialFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_arithmetic_table_trial.csv"
+pyResBlockFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_arithmetic_table.csv"
 pyResBlockData = readtable(pyResBlockFile, separator=';')
 
 for bln=1:2
