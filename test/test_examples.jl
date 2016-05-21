@@ -1,6 +1,6 @@
 using Psychophysics
 
-fToProcess = ["Psychophysics.jl"]
+fToProcess = ["AdaptiveStaircase.jl", "Psychophysics.jl", "stats_utils.jl"]
 for fName in fToProcess
 #fName = fToProcess[1]
     fIn = open(string("../src/", fName), "r")

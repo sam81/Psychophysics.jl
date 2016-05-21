@@ -16,7 +16,7 @@
 
 module Psychophysics
 
-export gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, weibullPsy, wGeoMean
+export gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, SE, weibullPsy, wGeoMean
 
 export initTUD, update!
 export setupUML, UML_update

@@ -12,13 +12,13 @@ matrix:
   allow_failures:
     - julia: nightly
 
-before_script:
-  - wget https://github.com/sam81/Psychophysics_test_data/archive/master.zip
-  - unzip master.zip -d ../
-  - mv ../Psychophysics_test_data-master/ ../Psychophysics_test_data/
-  - wget https://github.com/sam81/Psychophysics_test_data/archive/master.zip
-  - unzip master.zip 
-  - mv Psychophysics_test_data-master/ Psychophysics_test_data/
+# before_script:
+#   - wget https://github.com/sam81/Psychophysics_test_data/archive/master.zip
+#   - unzip master.zip -d ../
+#   - mv ../Psychophysics_test_data-master/ ../Psychophysics_test_data/
+#   - wget https://github.com/sam81/Psychophysics_test_data/archive/master.zip
+#   - unzip master.zip 
+#   - mv Psychophysics_test_data-master/ Psychophysics_test_data/
 
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
