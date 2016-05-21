@@ -8,9 +8,6 @@ julia:
 notifications:
     email: false
 
-addons:
-  ssh_known_hosts: 192.30.252.121
-
 matrix:
   allow_failures:
     - julia: nightly
@@ -18,7 +15,9 @@ matrix:
 before_script:
   - pwd
   - cd ..
-  - git clone git@github.com:sam81/Psychophysics_test_data.git
+  - wget https://github.com/sam81/Psychophysics.jl/archive/master.zip
+  - unzip Psychophysics_test_data-master.zip
+  - mv Psychophysics_test_data-master/ Psychophysics_test_data/
   - cd $TRAVIS_BUILD_DIR
   - pwd
   
