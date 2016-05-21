@@ -1,9 +1,10 @@
 using DataFrames, Psychophysics
 using Base.Test
 
+test_data_dir = "../../Psychophysics_test_data/"
 
-pyResTrialFile = "../test_data/pychoacoustics_data/transformed_up-down/res_arithmetic_table_trial.csv"
-pyResBlockFile = "../test_data/pychoacoustics_data/transformed_up-down/res_arithmetic_table.csv"
+pyResTrialFile = test_data_dir * "/pychoacoustics_data/transformed_up-down/res_arithmetic_table_trial.csv"
+pyResBlockFile = test_data_dir * "/pychoacoustics_data/transformed_up-down/res_arithmetic_table.csv"
 pyResBlockData = readtable(pyResBlockFile, separator=';')
 
 for bln=1:2
@@ -31,8 +32,8 @@ for bln=1:2
 end
 
 
-pyResTrialFile = "../test_data/pychoacoustics_data/transformed_up-down/res_geometric_table_trial.csv"
-pyResBlockFile = "../test_data/pychoacoustics_data/transformed_up-down/res_geometric_table.csv"
+pyResTrialFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_geometric_table_trial.csv"
+pyResBlockFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_geometric_table.csv"
 pyResBlockData = readtable(pyResBlockFile, separator=';')
 
 for bln=1:2
@@ -60,8 +61,8 @@ for bln=1:2
 end
 
 
-pyResTrialFile = "../test_data/pychoacoustics_data/weighted_up-down/res_arithmetic_table_trial.csv"
-pyResBlockFile = "../test_data/pychoacoustics_data/weighted_up-down/res_arithmetic_table.csv"
+pyResTrialFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_arithmetic_table_trial.csv"
+pyResBlockFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_arithmetic_table.csv"
 pyResBlockData = readtable(pyResBlockFile, separator=';')
 
 for bln=1:2
@@ -89,8 +90,8 @@ for bln=1:2
 end
 
 
-pyResTrialFile = "../test_data/pychoacoustics_data/weighted_up-down/res_geometric_table_trial.csv"
-pyResBlockFile = "../test_data/pychoacoustics_data/weighted_up-down/res_geometric_table.csv"
+pyResTrialFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_geometric_table_trial.csv"
+pyResBlockFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_geometric_table.csv"
 pyResBlockData = readtable(pyResBlockFile, separator=';')
 
 for bln=1:2
