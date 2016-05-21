@@ -15,7 +15,7 @@ matrix:
 before_script:
   - pwd
   - cd ..
-  - wget https://github.com/sam81/Psychophysics.jl/archive/master.zip
+  - wget https://github.com/sam81/Psychophysics_test_data/archive/master.zip
   - unzip master.zip
   - cd $TRAVIS_BUILD_DIR
   - pwd
