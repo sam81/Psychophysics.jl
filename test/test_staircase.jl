@@ -1,7 +1,11 @@
 using DataFrames, Psychophysics
 using Base.Test
 
-test_data_dir = "../../Psychophysics_test_data/"
+#test_data_dir = "../../Psychophysics_test_data/"
+test_data_dir = "Psychophysics_test_data/"
+run(`wget https://github.com/sam81/Psychophysics_test_data/archive/master.zip`)
+run(`unzip master.zip`)
+run(`mv Psychophysics_test_data-master/ Psychophysics_test_data/`)
 
 pyResTrialFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_arithmetic_table_trial.csv"
 pyResBlockFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_arithmetic_table.csv"
