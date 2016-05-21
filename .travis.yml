@@ -8,6 +8,9 @@ julia:
 notifications:
     email: false
 
+addons:
+  ssh_known_hosts: git.github.com
+
 matrix:
   allow_failures:
     - julia: nightly
