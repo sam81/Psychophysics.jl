@@ -43,8 +43,10 @@ type AdaptiveStaircase{S<:Real, T<:Real, V<:Real, P<:Int}
     turnpointSD::Real
 end
 
-@doc doc"""
+"""
 Initialize an adaptive staircase track.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -67,7 +69,7 @@ TUD = initTUD(paradigm="transformed up-down",
               terminationRule="turnpoints",
               nTurnpointsToRun=16)
 ```
-"""->
+"""
 
 function initTUD{T<:Real, P<:Int}(;paradigm::ASCIIString="transformed up-down",
                                   nCorrectNeeded::Int=2, nIncorrectNeeded::Int=1,

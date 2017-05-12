@@ -23,15 +23,16 @@ export setupUML, UML_update
 export betaABFromMeanSTD, generalizedBetaABFromMeanSTD
 
 
-VERSION < v"0.4-" && using Docile
-
+using DocStringExtensions
 include("AdaptiveStaircase.jl")
 #include("UML.jl")
 include("stats_utils.jl")
 
 
-@doc doc"""
+"""
 Compute the gaussian psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -55,7 +56,7 @@ gaussianPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 # for several midpoints
 gaussianPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
-"""->
+"""
 
 function gaussianPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     # as in UML toolbox
@@ -75,8 +76,10 @@ function gaussianPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real,
     return out
 end
 
-@doc doc"""
+"""
 Compute the inverse of the gaussian psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -99,9 +102,8 @@ invGaussianPsy(0.9, 5, 1, 0.5, 0.02)
 invGaussianPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
 #for several midpoints
 invGaussianPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
-```
-    
-"""->
+``` 
+"""
 
 function invGaussianPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = midpoint + sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
@@ -118,8 +120,10 @@ function invGaussianPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Re
     return out
 end
 
-@doc doc"""
+"""
 Compute the Weibull psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -143,7 +147,7 @@ weibullPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 # for several midpoints
 weibullPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
-"""->
+"""
 
 function weibullPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = guess+(1-guess-lapse)*(1-exp(-(x/midpoint)^slope))
@@ -160,8 +164,10 @@ function weibullPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, 
     return out
 end
 
-@doc doc"""
+"""
 Compute the inverse of the Weibull psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -186,7 +192,7 @@ invWeibullPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
 invWeibullPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
 ```
     
-"""->
+"""
 
 function invWeibullPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = midpoint * ( (-log(1-(p-guess)/(1-guess-lapse)))^(1/slope) )
@@ -203,8 +209,10 @@ function invWeibullPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Rea
     return out
 end
 
-@doc doc"""
+"""
 Compute the gumbel psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -229,7 +237,7 @@ gumbelPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 gumbelPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 
 ```
-"""->
+"""
     
 function gumbelPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = guess + (1-guess-lapse) * (1-exp(-10^(slope*(x-midpoint))))
@@ -246,8 +254,10 @@ function gumbelPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, g
     return out
 end
 
-@doc doc"""
+"""
 Compute the inverse of the gumbel psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -270,9 +280,8 @@ invGumbelPsy(0.9, 5, 1, 0.5, 0.02)
 invGumbelPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
 #for several midpoints
 invGumbelPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
-```
-    
-"""->
+``` 
+"""
 
 function invGumbelPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = midpoint + (log10(-log(1 - (p-guess)/(1-guess-lapse))))/slope
@@ -289,8 +298,10 @@ function invGumbelPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real
     return out
 end
 
-@doc doc"""
+"""
 Compute the logistic psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -314,7 +325,7 @@ logisticPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 # for several midpoints
 logisticPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
-"""->
+"""
 
 function logisticPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
 
@@ -340,8 +351,10 @@ function logisticPsy{T<:Real}(x::Real, midpoint::AbstractArray{T,3}, slope::Abst
     return out
 end
 
-@doc doc"""
+"""
 Compute the inverse of the logistic psychometric function.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -366,7 +379,7 @@ invLogisticPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
 invLogisticPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
 ```
     
-"""->
+"""
 function invLogisticPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
 
     x = midpoint - (1/slope)*log((1-guess-lapse)./(p-guess) - 1)

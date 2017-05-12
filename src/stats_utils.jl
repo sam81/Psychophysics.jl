@@ -1,5 +1,7 @@
-@doc doc"""
+"""
 Compute the geometric mean.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -14,7 +16,7 @@ Compute the geometric mean.
 ```julia
 geoMean([3, 75, 1000])
 ```
-"""->
+"""
 function geoMean{T<:Real}(x::AbstractVector{T})
     if in(-1, sign(x))
         error("Cannot compute geometric mean with negative values")
@@ -24,8 +26,10 @@ function geoMean{T<:Real}(x::AbstractVector{T})
     return m
 end
 
-@doc doc"""
+"""
 Compute a weighted geometric mean.
+
+$(SIGNATURES)
 
 ##### Parameters
 * `x`: Vector containing the values for which to compute the mean.
@@ -39,7 +43,7 @@ Compute a weighted geometric mean.
 ```julia
 wGeoMean([5, 80, 150], [0.4, 0.2, 0.4])
 ```
-"""->
+"""
 function wGeoMean{T<:Real, P<:Real}(x::AbstractVector{T},
                                     w::AbstractVector{P})
     if in(-1, sign(x))
@@ -49,8 +53,10 @@ function wGeoMean{T<:Real, P<:Real}(x::AbstractVector{T},
     return wm
 end
 
-@doc doc"""
+"""
 Compute the geometric standard deviation.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -65,7 +71,7 @@ Compute the geometric standard deviation.
 ```julia
 geoSD([3, 75, 1000])
 ```
-"""->
+"""
 function geoSD{T<:Real}(x::AbstractVector{T})
     if in(-1, sign(x))
         error("Cannot compute geometric standard deviation with negative values")
@@ -74,8 +80,10 @@ function geoSD{T<:Real}(x::AbstractVector{T})
     return out
 end
 
-@doc doc"""
+"""
 Compute the geometric standard error of the mean.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -91,7 +99,7 @@ Compute the geometric standard error of the mean.
 geoSE([3, 75, 1000])
 ```
 
-"""->
+"""
 function geoSE{T<:Real}(x::AbstractVector{T})
     if in(-1, sign(x))
         error("Cannot compute geometric standard error with negative values")
@@ -101,8 +109,10 @@ function geoSE{T<:Real}(x::AbstractVector{T})
     return out
 end
 
-@doc doc"""
-Compute the standard error of the mean
+"""
+Compute the standard error of the mean.
+
+$(SIGNATURES)
 
 ##### Parameters
 
@@ -121,7 +131,7 @@ SE([3, 8, NaN], removeNaN=false)
 SE([3, 8, NaN], removeNaN=true)
 ```
 
-"""->
+"""
 
 function SE{T<:Real}(x::AbstractVector{T}; removeNaN::Bool=false)
     if removeNaN == true
@@ -152,8 +162,9 @@ function betaABFromMeanSTD(mean::Real, std::Real)
 end
 
 
-function generalizedBetaABFromMeanSTD(mean::Real, std::Real, xmin::Real, xmax::Real)
-
+function generalizedBetaABFromMeanSTD(mu::Real, std::Real, xmin::Real, xmax::Real)
+    ## see http://stats.stackexchange.com/questions/12232/calculating-the-parameters-of-a-beta-distribution-using-the-mean-and-variance
+    
     lmbd = (((mu-xmin)*(xmax-mu))/std^2)-1
     a = lmbd*((mu-xmin)/(xmax-xmin))
     b = lmbd*((xmax-mu)/(xmax-xmin))
