@@ -1,7 +1,0 @@
-geoMean([3, 75, 1000])
-wGeoMean([5, 80, 150], [0.4, 0.2, 0.4])
-geoSD([3, 75, 1000])
-geoSE([3, 75, 1000])
-SE([3, 8, 9])
-SE([3, 8, NaN], removeNaN=false)
-SE([3, 8, NaN], removeNaN=true)

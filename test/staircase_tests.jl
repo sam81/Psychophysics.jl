@@ -3,6 +3,9 @@ using Base.Test
 
 #test_data_dir = "../../Psychophysics_test_data/"
 test_data_dir = "Psychophysics_test_data/"
+## run(`rm master.zip`)
+## run(`rm -r Psychophysics_test_data/`)
+## run(`rm -r Psychophysics_test_data-master/`)
 run(`wget https://github.com/sam81/Psychophysics_test_data/archive/master.zip`)
 run(`unzip master.zip`)
 run(`mv Psychophysics_test_data-master/ Psychophysics_test_data/`)
@@ -31,7 +34,11 @@ for bln=1:2
 
     @test isapprox(round(TUD.turnpointAverage,3), round(pyResBlockData[:threshold_arithmetic][bln],3))
     @test isapprox(round(TUD.turnpointSD, 3), round(pyResBlockData[:SD][bln], 3))
-                   
+
+    ## for tn=1:length(pyResTrialData[:response])
+    ##     @test pyResTrialData[:response][tn] .== TUD.responses[tn]
+    ##     @test pyResTrialData[:adaptive_difference][tn] .== TUD.levels[tn]
+    ## end
 
 end
 
@@ -60,7 +67,11 @@ for bln=1:2
 
     @test isapprox(round(TUD.turnpointAverage,3), round(pyResBlockData[:threshold_geometric][bln],3))
     @test isapprox(round(TUD.turnpointSD, 3), round(pyResBlockData[:SD][bln], 3))
-                   
+
+    ## for tn=1:length(pyResTrialData[:response])
+    ##     @test pyResTrialData[:response][tn] .== TUD.responses[tn]
+    ##     @test pyResTrialData[:adaptive_difference][tn] .== TUD.levels[tn]
+    ## end
 
 end
 

@@ -1,4 +1,4 @@
-#   Copyright (C) 2013-2016 Samuele Carcagno <sam.carcagno@gmail.com>
+#   Copyright (C) 2013-2017 Samuele Carcagno <sam.carcagno@gmail.com>
 #   This file is part of Psychophysics.jl
 
 #    Psychophysics.jl is free software: you can redistribute it and/or modify
@@ -15,25 +15,25 @@
 #    along with Psychophysics.jl.  If not, see <http://www.gnu.org/licenses/>.
 
 type AdaptiveStaircase{S<:Real, T<:Real, V<:Real, P<:Int}
-    paradigm::ASCIIString
+    paradigm::String
     nCorrectNeeded::Int
     nIncorrectNeeded::Int
     stepSizes::AbstractVector{T}
     turnpointsXStepSizes::AbstractVector{P}
-    procedure::ASCIIString
+    procedure::String
     adaptiveParam::Real
     responses::AbstractVector{P}
     levels::AbstractVector{S}
-    corrTrackDir::ASCIIString
-    incorrTrackDir::ASCIIString
-    trackDir::ASCIIString
+    corrTrackDir::String
+    incorrTrackDir::String
+    trackDir::String
     corrTrackSign::Int
     incorrTrackSign::Int
     turnpoints::AbstractVector{V}
     correctCount::Int
     incorrectCount::Int
     percCorrTracked::Real
-    terminationRule::ASCIIString
+    terminationRule::String
     nTrialsToRun::Real
     nTurnpointsToRun::Real
     nTrials::Real
@@ -71,13 +71,13 @@ TUD = initTUD(paradigm="transformed up-down",
 ```
 """
 
-function initTUD{T<:Real, P<:Int}(;paradigm::ASCIIString="transformed up-down",
+function initTUD{T<:Real, P<:Int}(;paradigm::String="transformed up-down",
                                   nCorrectNeeded::Int=2, nIncorrectNeeded::Int=1,
                                   stepSizes::AbstractVector{T}=[4,2],
                                   turnpointsXStepSizes::AbstractVector{P}=[4,12],
-                                  procedure::ASCIIString="arithmetic",
-                                  corrTrackDir::ASCIIString="down", percCorrTracked::Real=75,
-                                  terminationRule::ASCIIString="turnpoints",
+                                  procedure::String="arithmetic",
+                                  corrTrackDir::String="down", percCorrTracked::Real=75,
+                                  terminationRule::String="turnpoints",
                                   nTrialsToRun::Real=100,
                                   nTurnpointsToRun::Real=sum(turnpointsXStepSizes))
     
@@ -147,7 +147,7 @@ function update!(TUD::AdaptiveStaircase, level::Real, resp::Int)
         stepIndex = length(changeStepPoints) #use the last step size
     end
 
-    stepSize = Dict{ASCIIString, Real}()
+    stepSize = Dict{String, Real}()
     if TUD.paradigm == "transformed up-down"
         stepSize["down"] = TUD.stepSizes[stepIndex]
         stepSize["up"] = TUD.stepSizes[stepIndex]
@@ -167,7 +167,7 @@ function update!(TUD::AdaptiveStaircase, level::Real, resp::Int)
             TUD.correctCount = 0
             if TUD.trackDir == TUD.incorrTrackDir
                 push!(TUD.turnpoints, TUD.adaptiveParam)
-                TUD.trackDir = copy(TUD.corrTrackDir)
+                TUD.trackDir = TUD.corrTrackDir#copy(TUD.corrTrackDir)
                 TUD.nTurnpoints = TUD.nTurnpoints + 1
             end           
             if TUD.procedure == "arithmetic"
@@ -183,7 +183,7 @@ function update!(TUD::AdaptiveStaircase, level::Real, resp::Int)
             TUD.incorrectCount = 0
             if TUD.trackDir == TUD.corrTrackDir
                 push!(TUD.turnpoints, TUD.adaptiveParam)
-                TUD.trackDir = copy(TUD.incorrTrackDir)
+                TUD.trackDir = TUD.incorrTrackDir#copy(TUD.incorrTrackDir)
                 TUD.nTurnpoints = TUD.nTurnpoints + 1
             end           
             if TUD.procedure == "arithmetic"
