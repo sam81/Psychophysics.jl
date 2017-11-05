@@ -121,7 +121,7 @@ $(SIGNATURES)
 
 ##### Returns
 
-`se`: The geometric standard deviation.
+`se`: The standard error of the mean.
 
 ##### Examples
 
