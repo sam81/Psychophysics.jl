@@ -1,4 +1,4 @@
-#   Copyright (C) 2013-2017 Samuele Carcagno <sam.carcagno@gmail.com>
+#   Copyright (C) 2013-2018 Samuele Carcagno <sam.carcagno@gmail.com>
 #   This file is part of Psychophysics.jl
 
 #    Psychophysics.jl is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Psychophysics.jl.  If not, see <http://www.gnu.org/licenses/>.
 
-type AdaptiveStaircase{S<:Real, T<:Real, V<:Real, P<:Int}
+mutable struct AdaptiveStaircase{S<:Real, T<:Real, V<:Real, P<:Int}
     paradigm::String
     nCorrectNeeded::Int
     nIncorrectNeeded::Int
@@ -70,16 +70,15 @@ TUD = initTUD(paradigm="transformed up-down",
               nTurnpointsToRun=16)
 ```
 """
-
-function initTUD{T<:Real, P<:Int}(;paradigm::String="transformed up-down",
-                                  nCorrectNeeded::Int=2, nIncorrectNeeded::Int=1,
-                                  stepSizes::AbstractVector{T}=[4,2],
-                                  turnpointsXStepSizes::AbstractVector{P}=[4,12],
-                                  procedure::String="arithmetic",
-                                  corrTrackDir::String="down", percCorrTracked::Real=75,
-                                  terminationRule::String="turnpoints",
-                                  nTrialsToRun::Real=100,
-                                  nTurnpointsToRun::Real=sum(turnpointsXStepSizes))
+function initTUD(;paradigm::String="transformed up-down",
+                 nCorrectNeeded::Int=2, nIncorrectNeeded::Int=1,
+                 stepSizes::AbstractVector{T}=[4,2],
+                 turnpointsXStepSizes::AbstractVector{P}=[4,12],
+                 procedure::String="arithmetic",
+                 corrTrackDir::String="down", percCorrTracked::Real=75,
+                 terminationRule::String="turnpoints",
+    nTrialsToRun::Real=100,
+    nTurnpointsToRun::Real=sum(turnpointsXStepSizes)) where {T<:Real, P<:Int}
     
     if corrTrackDir == "down"
         incorrTrackDir = "up"

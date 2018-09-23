@@ -1,4 +1,4 @@
-#   Copyright (C) 2013-2016 Samuele Carcagno <sam.carcagno@gmail.com>
+#   Copyright (C) 2013-2018 Samuele Carcagno <sam.carcagno@gmail.com>
 #   This file is part of Psychophysics.jl
 
 #    Psychophysics.jl is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@ export setupUML, UML_update
 export betaABFromMeanSTD, generalizedBetaABFromMeanSTD
 
 
-using DocStringExtensions
+using DocStringExtensions, SpecialFunctions, Statistics
 include("AdaptiveStaircase.jl")
 #include("UML.jl")
 include("stats_utils.jl")
@@ -57,22 +57,21 @@ gaussianPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 gaussianPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
 """
-
 function gaussianPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     # as in UML toolbox
     out = guess+(1-guess-lapse)*(1+erf((x-midpoint)/sqrt(2*slope^2)))/2
     return out
 end
 
-function gaussianPsy{T<:Real}(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+function gaussianPsy(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
     # as in UML toolbox
-    out = guess+(1-guess-lapse)*(1+erf((x-midpoint)/sqrt(2*slope^2)))/2
+    out = guess .+ (1-guess-lapse)*(1 .+ erf.((x .- midpoint)/sqrt(2*slope^2)))/2
     return out
 end
 
-function gaussianPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+function gaussianPsy(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
     # as in UML toolbox
-    out = guess+(1-guess-lapse)*(1+erf((x-midpoint)/sqrt(2*slope^2)))/2
+    out = guess .+ (1-guess-lapse)*(1 .+ erf.((x .- midpoint)/sqrt(2*slope^2)))/2
     return out
 end
 
@@ -102,21 +101,20 @@ invGaussianPsy(0.9, 5, 1, 0.5, 0.02)
 invGaussianPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
 #for several midpoints
 invGaussianPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
-``` 
+```
 """
-
 function invGaussianPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = midpoint + sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
     return out
 end
 
-function invGaussianPsy{T<:Real}(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
-    out = midpoint + sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
+function invGaussianPsy(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = midpoint .+ sqrt(2*slope^2)*erfinv.(2*(p .- guess)/(1-guess-lapse) .- 1)
     return out
 end
 
-function invGaussianPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
-    out = midpoint + sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
+function invGaussianPsy(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = midpoint .+ sqrt(2*slope^2)*erfinv(2*(p-guess)/(1-guess-lapse)-1)
     return out
 end
 
@@ -148,19 +146,18 @@ weibullPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 weibullPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
 """
-
 function weibullPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = guess+(1-guess-lapse)*(1-exp(-(x/midpoint)^slope))
     return out
 end
 
-function weibullPsy{T<:Real}(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
-    out = guess+(1-guess-lapse)*(1-exp(-(x/midpoint).^slope))
+function weibullPsy(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = guess .+ (1-guess-lapse)*(1 .- exp.(-(x/midpoint).^slope))
     return out
 end
 
-function weibullPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
-    out = guess+(1-guess-lapse)*(1-exp(-(x./midpoint).^slope))
+function weibullPsy(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = guess .+ (1-guess-lapse)*(1 .- exp.(-(x./midpoint).^slope))
     return out
 end
 
@@ -193,18 +190,17 @@ invWeibullPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
 ```
     
 """
-
 function invWeibullPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = midpoint * ( (-log(1-(p-guess)/(1-guess-lapse)))^(1/slope) )
     return out
 end
 
-function invWeibullPsy{T<:Real}(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
-    out = midpoint * ( (-log(1-(p-guess)./(1-guess-lapse))).^(1/slope) )
+function invWeibullPsy(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = midpoint * ( (-log.(1 .- (p .- guess)./(1-guess-lapse))).^(1/slope) )
     return out
 end
 
-function invWeibullPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+function invWeibullPsy(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
     out = midpoint * ( (-log(1-(p-guess)/(1-guess-lapse)))^(1/slope) )
     return out
 end
@@ -237,20 +233,19 @@ gumbelPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 gumbelPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 
 ```
-"""
-    
+"""   
 function gumbelPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = guess + (1-guess-lapse) * (1-exp(-10^(slope*(x-midpoint))))
     return out
 end
 
-function gumbelPsy{T<:Real}(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
-    out = guess + (1-guess-lapse) * (1-exp(-10.^(slope*(x-midpoint))))
+function gumbelPsy(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = guess .+ (1-guess-lapse) * (1 .- exp.(-10 .^ (slope*(x .- midpoint))))
     return out
 end
 
-function gumbelPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
-    out = guess + (1-guess-lapse) * (1-exp(-10.^(slope*(x-midpoint))))
+function gumbelPsy(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = guess .+ (1-guess-lapse) * (1 .- exp.(-10 .^ (slope*(x .- midpoint))))
     return out
 end
 
@@ -280,21 +275,20 @@ invGumbelPsy(0.9, 5, 1, 0.5, 0.02)
 invGumbelPsy([0.7, 0.8, 0.9], 5, 1, 0.5, 0.02)
 #for several midpoints
 invGumbelPsy(0.9, [5, 5.5, 6], 1, 0.5, 0.02)
-``` 
+```
 """
-
 function invGumbelPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
     out = midpoint + (log10(-log(1 - (p-guess)/(1-guess-lapse))))/slope
     return out
 end
 
-function invGumbelPsy{T<:Real}(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
-    out = midpoint + (log10(-log(1 - (p-guess)/(1-guess-lapse))))/slope
+function invGumbelPsy(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = midpoint .+ (log10.(-log.(1 .- (p .- guess)/(1-guess-lapse))))/slope
     return out
 end
 
-function invGumbelPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
-    out = midpoint + (log10(-log(1 - (p-guess)/(1-guess-lapse))))/slope
+function invGumbelPsy(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
+    out = midpoint .+ (log10(-log(1 - (p-guess)/(1-guess-lapse))))/slope
     return out
 end
 
@@ -326,28 +320,27 @@ logisticPsy([2.5, 3, 3.5], 3, 2, 0.5, 0.001)
 logisticPsy(2.5, [3, 3.5, 4], 2, 0.5, 0.001)
 ```
 """
-
 function logisticPsy(x::Real, midpoint::Real, slope::Real, guess::Real, lapse::Real)
 
-    out = guess + (1-guess-lapse) *(1./(1+exp(slope*(midpoint-x))))
+    out = guess + (1-guess-lapse) *(1 ./ (1+exp(slope*(midpoint-x))))
     return out
 end
 
-function logisticPsy{T<:Real}(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+function logisticPsy(x::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
 
-    out = guess + (1-guess-lapse) *(1./(1+exp(slope*(midpoint-x))))
+    out = guess .+ (1-guess-lapse) *(1 ./ (1 .+ exp.(slope*(midpoint.-x))))
     return out
 end
 
-function logisticPsy{T<:Real}(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+function logisticPsy(x::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
 
-    out = guess + (1-guess-lapse) *(1./(1+exp(slope*(midpoint-x))))
+    out = guess .+ (1-guess-lapse) *(1 ./ (1 .+ exp.(slope*(midpoint.-x))))
     return out
 end
 
-function logisticPsy{T<:Real}(x::Real, midpoint::AbstractArray{T,3}, slope::AbstractArray{T,3}, guess::Real, lapse::AbstractArray{T,3})
+function logisticPsy(x::Real, midpoint::AbstractArray{T,3}, slope::AbstractArray{T,3}, guess::Real, lapse::AbstractArray{T,3}) where {T<:Real}
 
-    out = guess + (1-guess-lapse) .*(1./(1+exp(slope.*(midpoint-x))))
+    out = guess + (1-guess-lapse) .*(1 ./ (1+exp(slope.*(midpoint-x))))
     return out
 end
 
@@ -386,15 +379,15 @@ function invLogisticPsy(p::Real, midpoint::Real, slope::Real, guess::Real, lapse
     return x
 end
 
-function invLogisticPsy{T<:Real}(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real)
+function invLogisticPsy(p::AbstractVector{T}, midpoint::Real, slope::Real, guess::Real, lapse::Real) where {T<:Real}
 
-    x = midpoint - (1/slope)*log((1-guess-lapse)./(p-guess) - 1)
+    x = midpoint .- (1/slope)*log.((1-guess-lapse)./(p.-guess) .- 1)
     return x
 end
 
-function invLogisticPsy{T<:Real}(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real)
+function invLogisticPsy(p::Real, midpoint::AbstractVector{T}, slope::Real, guess::Real, lapse::Real) where {T<:Real}
 
-    x = midpoint - (1/slope)*log((1-guess-lapse)./(p-guess) - 1)
+    x = midpoint .- (1/slope)*log((1-guess-lapse)./(p-guess) - 1)
     return x
 end
 

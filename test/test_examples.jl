@@ -1,22 +1,26 @@
 using Psychophysics
 
 fToProcess = ["AdaptiveStaircase.jl", "Psychophysics.jl", "stats_utils.jl"]
+
 for fName in fToProcess
-#fName = fToProcess[1]
+#fName = fToProcess[3]
     fIn = open(string("../src/", fName), "r")
     fOut = open(string("test_", fName), "w")
     lns = readlines(fIn)
     idxStart = (Int)[]
     idxStop = (Int)[]
     for i=1:length(lns)
-        if lns[i] == "```julia\n"
+        if lns[i] == "```julia"
             push!(idxStart, i+1)
-        elseif lns[i] == "```\n"
+        elseif lns[i] == "```"
             push!(idxStop, i-1)
         end
     end
     for i=1:length(idxStart)
-        write(fOut, lns[idxStart[i]:idxStop[i]])
+        theseLines = lns[idxStart[i]:idxStop[i]]
+        for currLine in theseLines
+            write(fOut, string(currLine, "\n"))
+        end
     end
     close(fIn); close(fOut)
 end
@@ -26,3 +30,30 @@ for fName in fToProcess
     include(fNameTest)
 end
 
+# for fName in fToProcess
+# #fName = fToProcess[1]
+#     fIn = open(string("../src/", fName), "r")
+#     fOut = open(string("test_", fName), "w")
+#     lns = readlines(fIn)
+#     idxStart = (Int)[]
+#     idxStop = (Int)[]
+#     for i=1:length(lns)
+#         if lns[i] == "```julia"
+#             push!(idxStart, i+1)
+#         elseif lns[i] == "```"
+#             push!(idxStop, i-1)
+#         end
+#     end
+#     for i=1:length(idxStart)
+#         theseLines = lns[idxStart[i]:idxStop[i]]
+#         for currLine in theseLines
+#             write(fOut, string(currLine, "\n"))
+#         end
+#     end
+#     close(fIn); close(fOut)
+# end
+
+# for fName in fToProcess
+#     fNameTest = string("test_", fName)
+#     include(fNameTest)
+# end

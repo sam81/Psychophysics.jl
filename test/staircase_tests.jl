@@ -1,5 +1,4 @@
-using DataFrames, Psychophysics
-using Base.Test
+using CSV, DataFrames, Psychophysics, Test
 
 #test_data_dir = "../../Psychophysics_test_data/"
 test_data_dir = "Psychophysics_test_data/"
@@ -12,7 +11,7 @@ run(`mv Psychophysics_test_data-master/ Psychophysics_test_data/`)
 
 pyResTrialFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_arithmetic_table_trial.csv"
 pyResBlockFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_arithmetic_table.csv"
-pyResBlockData = readtable(pyResBlockFile, separator=';')
+pyResBlockData = CSV.read(pyResBlockFile, delim=';')
 
 for bln=1:2
     TUD = initTUD(paradigm="transformed up-down",
@@ -24,7 +23,7 @@ for bln=1:2
                   corrTrackDir="down",
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
-    pyResTrialData = readtable(pyResTrialFile, separator=';')
+    pyResTrialData = CSV.read(pyResTrialFile, delim=';')
     pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
 
     update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
@@ -32,8 +31,8 @@ for bln=1:2
         update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage,3), round(pyResBlockData[:threshold_arithmetic][bln],3))
-    @test isapprox(round(TUD.turnpointSD, 3), round(pyResBlockData[:SD][bln], 3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_arithmetic][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
 
     ## for tn=1:length(pyResTrialData[:response])
     ##     @test pyResTrialData[:response][tn] .== TUD.responses[tn]
@@ -45,7 +44,7 @@ end
 
 pyResTrialFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_geometric_table_trial.csv"
 pyResBlockFile = test_data_dir * "pychoacoustics_data/transformed_up-down/res_geometric_table.csv"
-pyResBlockData = readtable(pyResBlockFile, separator=';')
+pyResBlockData = CSV.read(pyResBlockFile, delim=';')
 
 for bln=1:2
     TUD = initTUD(paradigm="transformed up-down",
@@ -57,7 +56,7 @@ for bln=1:2
                   corrTrackDir="down",
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
-    pyResTrialData = readtable(pyResTrialFile, separator=';')
+    pyResTrialData = CSV.read(pyResTrialFile, delim=';')
     pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
 
     update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
@@ -65,8 +64,8 @@ for bln=1:2
         update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage,3), round(pyResBlockData[:threshold_geometric][bln],3))
-    @test isapprox(round(TUD.turnpointSD, 3), round(pyResBlockData[:SD][bln], 3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_geometric][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
 
     ## for tn=1:length(pyResTrialData[:response])
     ##     @test pyResTrialData[:response][tn] .== TUD.responses[tn]
@@ -78,7 +77,7 @@ end
 
 pyResTrialFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_arithmetic_table_trial.csv"
 pyResBlockFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_arithmetic_table.csv"
-pyResBlockData = readtable(pyResBlockFile, separator=';')
+pyResBlockData = CSV.read(pyResBlockFile, delim=';')
 
 for bln=1:2
     TUD = initTUD(paradigm="weighted up-down",
@@ -91,7 +90,7 @@ for bln=1:2
                   percCorrTracked=75,
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
-    pyResTrialData = readtable(pyResTrialFile, separator=';')
+    pyResTrialData = CSV.read(pyResTrialFile, delim=';')
     pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
 
     update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
@@ -99,15 +98,15 @@ for bln=1:2
         update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage,3), round(pyResBlockData[:threshold_arithmetic][bln],3))
-    @test isapprox(round(TUD.turnpointSD, 3), round(pyResBlockData[:SD][bln], 3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_arithmetic][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
                    
 end
 
 
 pyResTrialFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_geometric_table_trial.csv"
 pyResBlockFile = test_data_dir * "pychoacoustics_data/weighted_up-down/res_geometric_table.csv"
-pyResBlockData = readtable(pyResBlockFile, separator=';')
+pyResBlockData = CSV.read(pyResBlockFile, delim=';')
 
 for bln=1:2
     TUD = initTUD(paradigm="weighted up-down",
@@ -120,7 +119,7 @@ for bln=1:2
                   percCorrTracked=75,
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
-    pyResTrialData = readtable(pyResTrialFile, separator=';')
+    pyResTrialData = CSV.read(pyResTrialFile, delim=';')
     pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
 
     update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
@@ -128,7 +127,7 @@ for bln=1:2
         update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage,3), round(pyResBlockData[:threshold_geometric][bln],3))
-    @test isapprox(round(TUD.turnpointSD, 3), round(pyResBlockData[:SD][bln], 3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_geometric][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
                    
 end

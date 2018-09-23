@@ -1,4 +1,4 @@
-using Base.Test, Psychophysics
+using Test, Psychophysics
 
 @test_throws(ErrorException, geoMean([-1,2,3]))
 @test_throws(ErrorException, wGeoMean([-1,2,3], [0.4, 0.2, 0.4]))

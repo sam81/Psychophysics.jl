@@ -17,7 +17,7 @@ $(SIGNATURES)
 geoMean([3, 75, 1000])
 ```
 """
-function geoMean{T<:Real}(x::AbstractVector{T})
+function geoMean(x::AbstractVector{T}) where {T<:Real}
     if in(-1, sign.(x))
         error("Cannot compute geometric mean with negative values")
     end
@@ -44,8 +44,8 @@ $(SIGNATURES)
 wGeoMean([5, 80, 150], [0.4, 0.2, 0.4])
 ```
 """
-function wGeoMean{T<:Real, P<:Real}(x::AbstractVector{T},
-                                    w::AbstractVector{P})
+function wGeoMean(x::AbstractVector{T},
+                  w::AbstractVector{P}) where {T<:Real, P<:Real}
     if in(-1, sign.(x))
         error("Cannot compute weighted geometric mean with negative values")
     end
@@ -72,7 +72,7 @@ $(SIGNATURES)
 geoSD([3, 75, 1000])
 ```
 """
-function geoSD{T<:Real}(x::AbstractVector{T})
+function geoSD(x::AbstractVector{T}) where {T<:Real}
     if in(-1, sign.(x))
         error("Cannot compute geometric standard deviation with negative values")
     end
@@ -100,12 +100,12 @@ geoSE([3, 75, 1000])
 ```
 
 """
-function geoSE{T<:Real}(x::AbstractVector{T})
+function geoSE(x::AbstractVector{T}) where {T<:Real}
     if in(-1, sign.(x))
         error("Cannot compute geometric standard error with negative values")
     end
     n = length(x)
-    out = exp(sqrt(sum((log.(x) - mean(log.(x))).^2) / ((n-1)* n)))
+    out = exp(sqrt(sum((log.(x) .- mean(log.(x))).^2) / ((n-1)* n)))
     return out
 end
 
@@ -132,10 +132,9 @@ SE([3, 8, NaN], removeNaN=true)
 ```
 
 """
-
-function SE{T<:Real}(x::AbstractVector{T}; removeNaN::Bool=false)
+function SE(x::AbstractVector{T}; removeNaN::Bool=false) where {T<:Real}
     if removeNaN == true
-         x = x[isnan(x) .== false]
+         x = x[isnan.(x) .== false]
     end
     n = length(x)
     out = std(x) / sqrt(n)
