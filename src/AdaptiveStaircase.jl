@@ -1,4 +1,4 @@
-#   Copyright (C) 2013-2018 Samuele Carcagno <sam.carcagno@gmail.com>
+#   Copyright (C) 2013-2020 Samuele Carcagno <sam.carcagno@gmail.com>
 #   This file is part of Psychophysics.jl
 
 #    Psychophysics.jl is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ mutable struct AdaptiveStaircase{S<:Real, T<:Real, V<:Real, P<:Int}
     turnpoints::AbstractVector{V}
     correctCount::Int
     incorrectCount::Int
-    percCorrTracked::Real
+    percCorrTracked::Union{Missing,Real}
     terminationRule::String
     nTrialsToRun::Real
     nTurnpointsToRun::Real
@@ -93,7 +93,7 @@ function initTUD(;paradigm::String="transformed up-down",
     end
 
     if paradigm == "transformed up-down"
-        percCorrTracked = 0.5^(1/nCorrectNeeded)
+        percCorrTracked = missing #0.5^(1/nCorrectNeeded)
     end
     adaptiveParam = 0
     TUD = AdaptiveStaircase(paradigm,

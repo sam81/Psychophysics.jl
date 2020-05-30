@@ -24,15 +24,15 @@ for bln=1:2
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
     pyResTrialData = CSV.read(pyResTrialFile, delim=';')
-    pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
+    pyResTrialData = pyResTrialData[pyResTrialData[!,:block] .== bln,:]
 
-    update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
-    for i=2:length(pyResTrialData[:response])
-        update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
+    update!(TUD, pyResTrialData[!, :adaptive_difference][1], pyResTrialData[!,:response][1])
+    for i=2:length(pyResTrialData[!,:response])
+        update!(TUD, TUD.adaptiveParam, pyResTrialData[!,:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_arithmetic][bln]; digits=3))
-    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[!,:threshold_arithmetic][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[!,:SD][bln]; digits=3))
 
     ## for tn=1:length(pyResTrialData[:response])
     ##     @test pyResTrialData[:response][tn] .== TUD.responses[tn]
@@ -57,15 +57,15 @@ for bln=1:2
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
     pyResTrialData = CSV.read(pyResTrialFile, delim=';')
-    pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
+    pyResTrialData = pyResTrialData[pyResTrialData[!,:block] .== bln,:]
 
-    update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
-    for i=2:length(pyResTrialData[:response])
-        update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
+    update!(TUD, pyResTrialData[!,:adaptive_difference][1], pyResTrialData[!,:response][1])
+    for i=2:length(pyResTrialData[!,:response])
+        update!(TUD, TUD.adaptiveParam, pyResTrialData[!,:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_geometric][bln]; digits=3))
-    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[!,:threshold_geometric][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[!,:SD][bln]; digits=3))
 
     ## for tn=1:length(pyResTrialData[:response])
     ##     @test pyResTrialData[:response][tn] .== TUD.responses[tn]
@@ -91,15 +91,15 @@ for bln=1:2
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
     pyResTrialData = CSV.read(pyResTrialFile, delim=';')
-    pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
+    pyResTrialData = pyResTrialData[pyResTrialData[!,:block] .== bln,:]
 
-    update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
-    for i=2:length(pyResTrialData[:response])
-        update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
+    update!(TUD, pyResTrialData[!,:adaptive_difference][1], pyResTrialData[!,:response][1])
+    for i=2:length(pyResTrialData[!,:response])
+        update!(TUD, TUD.adaptiveParam, pyResTrialData[!,:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_arithmetic][bln]; digits=3))
-    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[!,:threshold_arithmetic][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[!,:SD][bln]; digits=3))
                    
 end
 
@@ -120,14 +120,14 @@ for bln=1:2
                   terminationRule="turnpoints",
                   nTurnpointsToRun=16)
     pyResTrialData = CSV.read(pyResTrialFile, delim=';')
-    pyResTrialData = pyResTrialData[pyResTrialData[:block] .== bln,:]
+    pyResTrialData = pyResTrialData[pyResTrialData[!,:block] .== bln,:]
 
-    update!(TUD, pyResTrialData[:adaptive_difference][1], pyResTrialData[:response][1])
-    for i=2:length(pyResTrialData[:response])
-        update!(TUD, TUD.adaptiveParam, pyResTrialData[:response][i])
+    update!(TUD, pyResTrialData[!,:adaptive_difference][1], pyResTrialData[!,:response][1])
+    for i=2:length(pyResTrialData[!,:response])
+        update!(TUD, TUD.adaptiveParam, pyResTrialData[!,:response][i])
     end
 
-    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[:threshold_geometric][bln]; digits=3))
-    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[:SD][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointAverage; digits=3), round(pyResBlockData[!,:threshold_geometric][bln]; digits=3))
+    @test isapprox(round(TUD.turnpointSD; digits=3), round(pyResBlockData[!,:SD][bln]; digits=3))
                    
 end
