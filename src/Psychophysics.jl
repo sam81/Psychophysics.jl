@@ -1,4 +1,4 @@
-#   Copyright (C) 2013-2018 Samuele Carcagno <sam.carcagno@gmail.com>
+#   Copyright (C) 2013-2020 Samuele Carcagno <sam.carcagno@gmail.com>
 #   This file is part of Psychophysics.jl
 
 #    Psychophysics.jl is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
 
 module Psychophysics
 
-export gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, SE, weibullPsy, wGeoMean
+export deltaLToWeberFracdB, gaussianPsy, geoMean, geoSD, geoSE, gumbelPsy, invGaussianPsy, invGumbelPsy, invLogisticPsy, invWeibullPsy, logisticPsy, SE, weberFracdBToDeltaL, weibullPsy, wGeoMean
 
 export initTUD, update!
 export setupUML, UML_update
@@ -27,7 +27,7 @@ using DocStringExtensions, SpecialFunctions, Statistics
 include("AdaptiveStaircase.jl")
 #include("UML.jl")
 include("stats_utils.jl")
-
+include("utils.jl")
 
 """
 Compute the gaussian psychometric function.

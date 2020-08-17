@@ -166,7 +166,7 @@ function update!(TUD::AdaptiveStaircase, level::Real, resp::Int)
             TUD.correctCount = 0
             if TUD.trackDir == TUD.incorrTrackDir
                 push!(TUD.turnpoints, TUD.adaptiveParam)
-                TUD.trackDir = TUD.corrTrackDir#copy(TUD.corrTrackDir)
+                TUD.trackDir = TUD.corrTrackDir #copy(TUD.corrTrackDir)
                 TUD.nTurnpoints = TUD.nTurnpoints + 1
             end           
             if TUD.procedure == "arithmetic"
@@ -182,7 +182,7 @@ function update!(TUD::AdaptiveStaircase, level::Real, resp::Int)
             TUD.incorrectCount = 0
             if TUD.trackDir == TUD.corrTrackDir
                 push!(TUD.turnpoints, TUD.adaptiveParam)
-                TUD.trackDir = TUD.incorrTrackDir#copy(TUD.incorrTrackDir)
+                TUD.trackDir = TUD.incorrTrackDir #copy(TUD.incorrTrackDir)
                 TUD.nTurnpoints = TUD.nTurnpoints + 1
             end           
             if TUD.procedure == "arithmetic"
